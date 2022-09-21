@@ -1,52 +1,70 @@
-function validarProduto(idNomeProduto, idCodProduto, idQtidadeProduto) {
-    let nome = document.getElementById(idNomeProduto).value;
-    let codigo = document.getElementById(idCodProduto).value;
-    let qtidade = document.getElementById(idQtidadeProduto).value;
+function validarProduto(nomeProduto, codProduto, qtdadeProduto) {
+    let nome = document.getElementById(nomeProduto).value,
+        codigo = document.getElementById(codProduto).value,
+        qtidade = document.getElementById(qtdadeProduto).value;
 
-    if (nome == "")
+    if (nome === "") {
         alert("Nome do produto não pode estar em branco. Favor preenchê-lo!");
-    else if (codigo == "")
+    } else if (codigo === "") {
         alert("Código do produto não pode estar em branco. Favor preenchê-lo!");
-    else cadastrarProduto(nome, codigo, parseInt(qtidade));
+    } else {
+        cadastrarProduto(nome, codigo, parseInt(qtidade));
+    }
 }
 
-function cadastrarProduto(produto, codig, qtidade) {
-    let novoProduto = {nome:produto, codigo:codig, quantidade:qtidade};
+function cadastrarProduto(produto, codigo, qtidade) {
+    let novoProduto = { nome: produto, codigo: codigo, quantidade: qtidade };
 
     if (typeof(Storage) !== "undefined") {
         let produtos = localStorage.getItem("produtos");
-        if (produtos == null) produtos = []; // Nenhum produto ainda foi cadastrado
-        else produtos = JSON.parse(produtos);
+
+        if (produtos === null) { // Nenhum produto ainda foi cadastrado
+            produtos = [];
+        } else {
+            produtos = JSON.parse(produtos);
+        }
+
+        // produtos = produtos === null ? [] : JSON.parse(produtos);
+
         produtos.push(novoProduto); // Adiciona um novo produto
-        localStorage.setItem("produtos",JSON.stringify(produtos))
+        localStorage.setItem("produtos",JSON.stringify(produtos));
+
         alert("Foram cadastradas com sucesso "+qtidade+" unidades do produto "+ produto+"!");
+
         atualizarTotalEstoque("totalEstoque");
+
         location.reload();
-    } 
-    else alert("A versão do seu navegador é muito antiga. Por isso, não será possível executar essa aplicação");
+    } else {
+        alert("A versão do seu navegador é muito antiga. Por isso, não será possível executar essa aplicação");
+    }
 }
 
-function atualizarTotalEstoque(idCampo) {
-    localStorage.setItem("totalEstoque",++document.getElementById(idCampo).innerHTML)
+function atualizarTotalEstoque(totalEstoque) {
+    localStorage.setItem("totalEstoque", ++document.getElementById(totalEstoque).innerHTML);
 }
 
-function carregarTotalEstoque(idCampo) {
+function carregarTotalEstoque(_totalEstoque) {
     if (typeof(Storage) !== "undefined") {
         let totalEstoque = localStorage.getItem("totalEstoque");
-        if (totalEstoque == null) totalEstoque = 0;
-        document.getElementById(idCampo).innerHTML = totalEstoque;
+        totalEstoque = totalEstoque !== null ?? 0; // IF ternário
+        document.getElementById(_totalEstoque).innerHTML = totalEstoque;
+    } else {
+        alert("A versão do seu navegador é muito antiga. Por isso, não será possível executar essa aplicação");
     }
-    else alert("A versão do seu navegador é muito antiga. Por isso, não será possível executar essa aplicação");
 }
 
 function listarEstoque() {
-    if (typeof(Storage) !== "undefined") {
+    // if (typeof(Storage) !== "undefined") {
+    if (Storage !== undefined) {
         let produtos = localStorage.getItem("produtos");
-        document.write("<h1>Estoque:</h1>")
-        if (produtos == null)
+
+        document.write("<h1>Estoque:</h1>");
+
+        if (produtos === null) {
             document.write("<h3>Ainda não há nenhum item no estoque</h3>");
-        else {
+        } else {
             produtos = JSON.parse(produtos);
+
             produtos.forEach(produto => {
                 document.write("<ul>");
                 document.write("<li>Nome do produto: "+produto.nome+"</li>");
@@ -55,6 +73,7 @@ function listarEstoque() {
                 document.write("</ul>");
             });
         }
-    } 
-    else alert("A versão do seu navegador é muito antiga. Por isso, não será possível visualizar o estoque!");    
+    } else {
+        alert("A versão do seu navegador é muito antiga. Por isso, não será possível visualizar o estoque!");
+    }   
 }
