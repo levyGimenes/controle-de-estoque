@@ -34,8 +34,6 @@ function cadastrarProduto(produto, codigo, qtidade) {
         atualizarTotalEstoque("totalEstoque");
 
         location.reload();
-    } else {
-        alert("A versão do seu navegador é muito antiga. Por isso, não será possível executar essa aplicação");
     }
 }
 
@@ -48,8 +46,6 @@ function carregarTotalEstoque(_totalEstoque) {
         let totalEstoque = localStorage.getItem("totalEstoque");
         totalEstoque = totalEstoque !== null ?? 0; // IF ternário
         document.getElementById(_totalEstoque).innerHTML = totalEstoque;
-    } else {
-        alert("A versão do seu navegador é muito antiga. Por isso, não será possível executar essa aplicação");
     }
 }
 
@@ -73,7 +69,5 @@ function listarEstoque() {
                 document.write("</ul>");
             });
         }
-    } else {
-        alert("A versão do seu navegador é muito antiga. Por isso, não será possível visualizar o estoque!");
-    }   
+    }
 }
